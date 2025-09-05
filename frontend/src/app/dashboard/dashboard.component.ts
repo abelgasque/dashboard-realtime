@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from './dashboard.service';
-import { ChartData, Chart } from 'chart.js';
+import { ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
@@ -11,6 +11,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   data: any;
+  listData: any[] = [];
 
   lineChartOptions = {
     animation: {
@@ -61,40 +62,74 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getDashboardData().subscribe((res: any) => {
       this.data = res;
 
-      if (res.status === 'success') {
-        this.lineChartData.datasets[0].data.push(res.value);
-      } else {
-        this.lineChartData.datasets[1].data.push(res.value);
-      }
-      this.lineChartData.labels = this.lineChartData.datasets[0].data.map((_, i) => {
-        const time = new Date(res[i]?.time || res.time);
-        return time.toLocaleTimeString();
+      this.listData.push(this.data);
+      this.listData.sort(
+        (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
+      );
+
+      const grouped: Record<string, { success: number; error: number }> = {};
+
+      this.listData.forEach(item => {
+        const d = new Date(item.time);
+        d.setMinutes(0, 0, 0);
+        const hourKey = `${d.getHours().toString().padStart(2, '0')}:00`;
+
+        if (!grouped[hourKey]) {
+          grouped[hourKey] = { success: 0, error: 0 };
+        }
+
+        if (item.status === 'success') {
+          grouped[hourKey].success += item.value;
+        } else {
+          grouped[hourKey].error += item.value;
+        }
       });
 
-      const successCount = this.lineChartData.datasets[0].data.filter(v => v !== null).length;
-      const errorCount = this.lineChartData.datasets[1].data.filter(v => v !== null).length;
-
-      this.pieChartData = {
-        ...this.pieChartData,
-        datasets: [{
-          ...this.pieChartData.datasets[0],
-          data: [successCount, errorCount]
-        }]
-      };
+      const labels = Object.keys(grouped).sort(
+        (a, b) => parseInt(a) - parseInt(b)
+      );
 
       this.barChartData = {
         ...this.barChartData,
+        labels,
         datasets: [
           {
             ...this.barChartData.datasets[0],
-            data: [...this.barChartData.datasets[0].data, this.lineChartData.datasets[0].data.slice(-1)[0]]
+            data: labels.map(l => grouped[l].success)
           },
           {
             ...this.barChartData.datasets[1],
-            data: [...this.barChartData.datasets[1].data, this.lineChartData.datasets[1].data.slice(-1)[0]]
+            data: labels.map(l => grouped[l].error)
           }
-        ],
-        labels: [...(this.barChartData.labels || []), new Date(res.time).toLocaleTimeString()]
+        ]
+      };
+
+      this.lineChartData = {
+        ...this.lineChartData,
+        labels,
+        datasets: [
+          {
+            ...this.lineChartData.datasets[0],
+            data: labels.map(l => grouped[l].success)
+          },
+          {
+            ...this.lineChartData.datasets[1],
+            data: labels.map(l => grouped[l].error)
+          }
+        ]
+      };
+
+      const successCount = this.listData.filter(i => i.status === 'success').length;
+      const errorCount = this.listData.filter(i => i.status === 'error').length;
+
+      this.pieChartData = {
+        ...this.pieChartData,
+        datasets: [
+          {
+            ...this.pieChartData.datasets[0],
+            data: [successCount, errorCount]
+          }
+        ]
       };
 
       this.chart?.update('active');
