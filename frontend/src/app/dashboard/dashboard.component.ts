@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartData } from 'chart.js';
 import { DashboardService } from './dashboard.service';
+import { ChartData } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,23 +8,36 @@ import { DashboardService } from './dashboard.service';
 })
 export class DashboardComponent implements OnInit {
   data: any;
-  chartData: ChartData<'line', number[], string> = {
+
+  lineChartData: ChartData<'line', number[], string> = {
     labels: [],
     datasets: [
-      { data: [], label: 'Valores' }
+      { data: [], label: 'Sucesso', borderColor: 'green', backgroundColor: 'rgba(0,255,0,0.3)', fill: true, pointBackgroundColor: 'green', pointBorderColor: 'darkgreen' },
+      { data: [], label: 'Erro', borderColor: 'red', backgroundColor: 'rgba(255,0,0,0.3)', fill: true, pointBackgroundColor: 'red', pointBorderColor: 'darkred' }
     ]
   };
-  chartLabels: string[] = [];
+
+  pieChartData: ChartData<'pie', number[], string> = {
+    labels: ['Sucesso', 'Erro'],
+    datasets: [
+      { data: [0, 0], backgroundColor: ['green', 'red'] }
+    ]
+  };
+
+  barChartLabels: string[] = [];
+  barChartData: ChartData<'bar', number[], string> = {
+    labels: [],
+    datasets: [{ data: [], label: 'Valores' }]
+  };
 
   constructor(private dashboardService: DashboardService) { }
-
 
   ngOnInit() {
     this.dashboardService.getDashboardData().subscribe((res: any) => {
       this.data = res;
 
-      const lastSuccess = [...this.chartData.datasets[0].data];
-      const lastError = this.chartData.datasets[1]?.data || [];
+      const lastSuccess = [...this.lineChartData.datasets[0].data];
+      const lastError = [...this.lineChartData.datasets[1].data];
 
       if (res.status === 'success') {
         lastSuccess.push(res.value);
@@ -32,32 +45,37 @@ export class DashboardComponent implements OnInit {
         lastError.push(res.value);
       }
 
-      const newLabels = [...(this.chartData.labels || []), new Date(res.time).toLocaleTimeString()];
+      const newLabels = [...(this.lineChartData.labels || []), new Date(res.time).toLocaleTimeString()];
+      if (lastSuccess.length > 10) {
+        lastSuccess.shift();
+        lastError.shift();
+        newLabels.shift();
+      }
 
-      this.chartData = {
+      this.lineChartData = {
         labels: newLabels,
         datasets: [
-          {
-            data: lastSuccess,
-            label: 'Sucesso',
-            borderColor: 'green',
-            backgroundColor: 'rgba(0,255,0,0.3)',
-            fill: true,
-            pointBackgroundColor: 'green',
-            pointBorderColor: 'darkgreen',
-            pointRadius: 5
-          },
-          {
-            data: lastError,
-            label: 'Erro',
-            borderColor: 'red',
-            backgroundColor: 'rgba(255,0,0,0.3)',
-            fill: true,
-            pointBackgroundColor: 'red',
-            pointBorderColor: 'darkred',
-            pointRadius: 5
-          }
+          { ...this.lineChartData.datasets[0], data: lastSuccess },
+          { ...this.lineChartData.datasets[1], data: lastError }
         ]
+      };
+
+      const successCount = lastSuccess.filter(v => v !== null).length;
+      const errorCount = lastError.filter(v => v !== null).length;
+
+      this.pieChartData = {
+        labels: ['Sucesso', 'Erro'],
+        datasets: [
+          { data: [successCount, errorCount], backgroundColor: ['green', 'red'] }
+        ]
+      };
+
+      const barValues = [...(this.barChartData.datasets[0].data || []), res.value];
+      const barLabels = [...(this.barChartLabels || []), new Date(res.time).toLocaleTimeString()];
+
+      this.barChartData = {
+        labels: barLabels,
+        datasets: [{ ...this.barChartData.datasets[0], data: barValues }]
       };
     });
   }

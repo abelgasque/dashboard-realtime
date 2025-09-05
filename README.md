@@ -36,11 +36,12 @@ Este projeto é um **Dashboard em tempo real** desenvolvido com **Node.js (backe
 - [X] Instalar dependências: `socket.io-client`, `ng2-charts`, `chart.js`.
 - [X] Criar service para consumir WebSockets.
 - [X] Criar componente `dashboard` para exibir métricas em tempo real.
-- [ ] Adicionar gráficos dinâmicos (line chart, bar chart, gauge).
+- [X] Adicionar gráficos dinâmicos (line chart, bar chart, pie).
+- [] Adicionar classe de estilo para layout do componente `dashboard`.
 
 ### 4. Integração
-- [ ] Conectar frontend ao backend via WebSocket.
-- [ ] Testar atualização em tempo real no browser.
+- [X] Conectar frontend ao backend via WebSocket.
+- [X] Testar atualização em tempo real no browser.
 
 ### 5. Deploy
 - [ ] Criar Dockerfile para backend e frontend.

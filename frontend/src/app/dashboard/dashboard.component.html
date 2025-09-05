@@ -1,13 +1,24 @@
 <h2>📊 Dashboard em Tempo Real</h2>
 
-<div *ngIf="data">
+<div *ngIf="data" class="real-time-info">
   <p><b>Hora:</b> {{ data.time }}</p>
   <p><b>Valor:</b> {{ data.value }}</p>
   <p><b>Status:</b> {{ data.status }}</p>
 </div>
 
-<canvas baseChart
-  [data]="chartData"
-  [labels]="chartData.labels"
-  [type]="'line'">
-</canvas>
+<div class="charts-container">
+  <div class="chart-wrapper line-chart">
+    <canvas baseChart [data]="lineChartData" [labels]="lineChartData.labels" [type]="'line'">
+    </canvas>
+  </div>
+
+  <div class="chart-wrapper pie-chart">
+    <canvas baseChart [data]="pieChartData" [type]="'pie'">
+    </canvas>
+  </div>
+
+  <div class="chart-wrapper bar-chart">
+    <canvas baseChart [data]="barChartData" [labels]="barChartLabels" [type]="'bar'">
+    </canvas>
+  </div>
+</div>
