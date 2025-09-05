@@ -1,24 +1,40 @@
-<h2>📊 Dashboard em Tempo Real</h2>
+<div class="dashboard-container">
+  <h2>📊 Dashboard em Tempo Real</h2>
 
-<div *ngIf="data" class="real-time-info">
-  <p><b>Hora:</b> {{ data.time }}</p>
-  <p><b>Valor:</b> {{ data.value }}</p>
-  <p><b>Status:</b> {{ data.status }}</p>
-</div>
+  <mat-card class="real-time-info" *ngIf="data">
+    <div class="info-content" style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+      <p style="margin: 0;"><b>Hora:</b> {{ data.time }}</p>
+      <p style="margin: 0;"><b>Valor:</b> {{ data.value }}</p>
+      <p style="margin: 0;"><b>Status:</b> {{ data.status }}</p>
+    </div>
+  </mat-card>
 
-<div class="charts-container">
-  <div class="chart-wrapper line-chart">
-    <canvas baseChart [data]="lineChartData" [labels]="lineChartData.labels" [type]="'line'">
-    </canvas>
-  </div>
+  <mat-grid-list cols="12" rowHeight="400px" gutterSize="20px" class="charts-grid">
+    <mat-grid-tile [colspan]="8" [rowspan]="1">
+      <mat-card class="chart-card line-chart">
+        <div class="chart-container">
+          <canvas baseChart [data]="lineChartData" [labels]="lineChartData.labels" [type]="'line'">
+          </canvas>
+        </div>
+      </mat-card>
+    </mat-grid-tile>
 
-  <div class="chart-wrapper pie-chart">
-    <canvas baseChart [data]="pieChartData" [type]="'pie'">
-    </canvas>
-  </div>
+    <mat-grid-tile [colspan]="4" [rowspan]="1">
+      <mat-card class="chart-card pie-chart">
+        <div class="chart-container">
+          <canvas baseChart [data]="pieChartData" [type]="'pie'">
+          </canvas>
+        </div>
+      </mat-card>
+    </mat-grid-tile>
 
-  <div class="chart-wrapper bar-chart">
-    <canvas baseChart [data]="barChartData" [labels]="barChartLabels" [type]="'bar'">
-    </canvas>
-  </div>
+    <mat-grid-tile [colspan]="12" [rowspan]="1">
+      <mat-card class="chart-card bar-chart">
+        <div class="chart-container">
+          <canvas baseChart [data]="barChartData" [labels]="barChartLabels" [type]="'bar'">
+          </canvas>
+        </div>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
 </div>

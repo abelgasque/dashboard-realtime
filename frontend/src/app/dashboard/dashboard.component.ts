@@ -27,7 +27,10 @@ export class DashboardComponent implements OnInit {
   barChartLabels: string[] = [];
   barChartData: ChartData<'bar', number[], string> = {
     labels: [],
-    datasets: [{ data: [], label: 'Valores' }]
+    datasets: [
+      { data: [], label: 'Sucesso', borderColor: 'green', backgroundColor: 'rgba(0,255,0,0.3)' },
+      { data: [], label: 'Erro', borderColor: 'red', backgroundColor: 'rgba(255,0,0,0.3)' }
+    ]
   };
 
   constructor(private dashboardService: DashboardService) { }
@@ -46,11 +49,6 @@ export class DashboardComponent implements OnInit {
       }
 
       const newLabels = [...(this.lineChartData.labels || []), new Date(res.time).toLocaleTimeString()];
-      if (lastSuccess.length > 10) {
-        lastSuccess.shift();
-        lastError.shift();
-        newLabels.shift();
-      }
 
       this.lineChartData = {
         labels: newLabels,
@@ -66,7 +64,7 @@ export class DashboardComponent implements OnInit {
       this.pieChartData = {
         labels: ['Sucesso', 'Erro'],
         datasets: [
-          { data: [successCount, errorCount], backgroundColor: ['green', 'red'] }
+          { data: [successCount, errorCount], backgroundColor: ['rgba(0,255,0,0.3)', 'rgba(255,0,0,0.3)'] }
         ]
       };
 
@@ -75,7 +73,10 @@ export class DashboardComponent implements OnInit {
 
       this.barChartData = {
         labels: barLabels,
-        datasets: [{ ...this.barChartData.datasets[0], data: barValues }]
+        datasets: [
+          { ...this.barChartData.datasets[0], data: lastSuccess },
+          { ...this.barChartData.datasets[1], data: lastError }
+        ]
       };
     });
   }

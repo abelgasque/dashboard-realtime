@@ -37,7 +37,7 @@ Este projeto é um **Dashboard em tempo real** desenvolvido com **Node.js (backe
 - [X] Criar service para consumir WebSockets.
 - [X] Criar componente `dashboard` para exibir métricas em tempo real.
 - [X] Adicionar gráficos dinâmicos (line chart, bar chart, pie).
-- [] Adicionar classe de estilo para layout do componente `dashboard`.
+- [X] Adicionar classe de estilo com Angular Material para layout do componente `dashboard`.
 
 ### 4. Integração
 - [X] Conectar frontend ao backend via WebSocket.
