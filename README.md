@@ -26,10 +26,10 @@ Este projeto é um **Dashboard em tempo real** desenvolvido com **Node.js (backe
 - [X] Decidir arquitetura: monolito simples ou microserviços.
 
 ### 2. Backend (Node.js)
-- [ ] Criar servidor com Express.
-- [ ] Integrar Socket.IO para envio de dados em tempo real.
-- [ ] Implementar endpoint REST de saúde (`/health`) para monitoramento.
-- [ ] Simular geração de dados ou integrar com fonte real.
+- [X] Criar servidor com Express.
+- [X] Integrar Socket.IO para envio de dados em tempo real.
+- [X] Implementar endpoint REST de saúde (`/health`) para monitoramento.
+- [X] Simular geração de dados ou integrar com fonte real.
 
 ### 3. Frontend (Angular)
 - [ ] Criar projeto Angular (`ng new dashboard-app`).
