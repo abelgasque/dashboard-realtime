@@ -13,7 +13,7 @@
     <mat-grid-tile [colspan]="8" [rowspan]="1">
       <mat-card class="chart-card line-chart">
         <div class="chart-container">
-          <canvas baseChart [data]="lineChartData" [labels]="lineChartData.labels" [type]="'line'">
+          <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'">
           </canvas>
         </div>
       </mat-card>
@@ -22,7 +22,8 @@
     <mat-grid-tile [colspan]="4" [rowspan]="1">
       <mat-card class="chart-card pie-chart">
         <div class="chart-container">
-          <canvas baseChart [data]="pieChartData" [type]="'pie'">
+
+          <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="'pie'">
           </canvas>
         </div>
       </mat-card>
@@ -31,7 +32,7 @@
     <mat-grid-tile [colspan]="12" [rowspan]="1">
       <mat-card class="chart-card bar-chart">
         <div class="chart-container">
-          <canvas baseChart [data]="barChartData" [labels]="barChartLabels" [type]="'bar'">
+          <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="'bar'">
           </canvas>
         </div>
       </mat-card>

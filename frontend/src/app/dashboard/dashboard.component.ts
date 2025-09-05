@@ -1,14 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from './dashboard.service';
-import { ChartData } from 'chart.js';
+import { ChartData, Chart } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
   data: any;
 
+  lineChartOptions = {
+    animation: {
+      duration: 1
+    },
+    responsive: true,
+    plugins: {
+      legend: { display: true }
+    }
+  };
   lineChartData: ChartData<'line', number[], string> = {
     labels: [],
     datasets: [
@@ -17,6 +29,11 @@ export class DashboardComponent implements OnInit {
     ]
   };
 
+  pieChartOptions = {
+    animation: { duration: 1 },
+    responsive: true,
+    plugins: { legend: { display: true } }
+  };
   pieChartData: ChartData<'pie', number[], string> = {
     labels: ['Sucesso', 'Erro'],
     datasets: [
@@ -25,6 +42,11 @@ export class DashboardComponent implements OnInit {
   };
 
   barChartLabels: string[] = [];
+  barChartOptions = {
+    animation: { duration: 1 },
+    responsive: true,
+    plugins: { legend: { display: true } }
+  };
   barChartData: ChartData<'bar', number[], string> = {
     labels: [],
     datasets: [
@@ -39,45 +61,43 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getDashboardData().subscribe((res: any) => {
       this.data = res;
 
-      const lastSuccess = [...this.lineChartData.datasets[0].data];
-      const lastError = [...this.lineChartData.datasets[1].data];
-
       if (res.status === 'success') {
-        lastSuccess.push(res.value);
+        this.lineChartData.datasets[0].data.push(res.value);
       } else {
-        lastError.push(res.value);
+        this.lineChartData.datasets[1].data.push(res.value);
       }
+      this.lineChartData.labels?.push(new Date(res.time).toLocaleTimeString());
 
-      const newLabels = [...(this.lineChartData.labels || []), new Date(res.time).toLocaleTimeString()];
-
-      this.lineChartData = {
-        labels: newLabels,
-        datasets: [
-          { ...this.lineChartData.datasets[0], data: lastSuccess },
-          { ...this.lineChartData.datasets[1], data: lastError }
-        ]
-      };
-
-      const successCount = lastSuccess.filter(v => v !== null).length;
-      const errorCount = lastError.filter(v => v !== null).length;
+      // Atualiza pie chart - criar novo array
+      const successCount = this.lineChartData.datasets[0].data.filter(v => v !== null).length;
+      const errorCount = this.lineChartData.datasets[1].data.filter(v => v !== null).length;
 
       this.pieChartData = {
-        labels: ['Sucesso', 'Erro'],
-        datasets: [
-          { data: [successCount, errorCount], backgroundColor: ['rgba(0,255,0,0.3)', 'rgba(255,0,0,0.3)'] }
-        ]
+        ...this.pieChartData,
+        datasets: [{
+          ...this.pieChartData.datasets[0],
+          data: [successCount, errorCount]
+        }]
       };
 
-      const barValues = [...(this.barChartData.datasets[0].data || []), res.value];
-      const barLabels = [...(this.barChartLabels || []), new Date(res.time).toLocaleTimeString()];
-
+      // Atualiza bar chart - criar novos arrays
       this.barChartData = {
-        labels: barLabels,
+        ...this.barChartData,
         datasets: [
-          { ...this.barChartData.datasets[0], data: lastSuccess },
-          { ...this.barChartData.datasets[1], data: lastError }
-        ]
+          {
+            ...this.barChartData.datasets[0],
+            data: [...this.barChartData.datasets[0].data, this.lineChartData.datasets[0].data.slice(-1)[0]]
+          },
+          {
+            ...this.barChartData.datasets[1],
+            data: [...this.barChartData.datasets[1].data, this.lineChartData.datasets[1].data.slice(-1)[0]]
+          }
+        ],
+        labels: [...(this.barChartData.labels || []), new Date(res.time).toLocaleTimeString()]
       };
+
+      // Força atualização
+      this.chart?.update('active');
     });
   }
 }
