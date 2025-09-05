@@ -66,9 +66,11 @@ export class DashboardComponent implements OnInit {
       } else {
         this.lineChartData.datasets[1].data.push(res.value);
       }
-      this.lineChartData.labels?.push(new Date(res.time).toLocaleTimeString());
+      this.lineChartData.labels = this.lineChartData.datasets[0].data.map((_, i) => {
+        const time = new Date(res[i]?.time || res.time);
+        return time.toLocaleTimeString();
+      });
 
-      // Atualiza pie chart - criar novo array
       const successCount = this.lineChartData.datasets[0].data.filter(v => v !== null).length;
       const errorCount = this.lineChartData.datasets[1].data.filter(v => v !== null).length;
 
@@ -80,7 +82,6 @@ export class DashboardComponent implements OnInit {
         }]
       };
 
-      // Atualiza bar chart - criar novos arrays
       this.barChartData = {
         ...this.barChartData,
         datasets: [
@@ -96,7 +97,6 @@ export class DashboardComponent implements OnInit {
         labels: [...(this.barChartData.labels || []), new Date(res.time).toLocaleTimeString()]
       };
 
-      // Força atualização
       this.chart?.update('active');
     });
   }
