@@ -19,7 +19,7 @@ io.on("connection", (socket) => {
     const data = {
       time: new Date(),
       value: Math.floor(Math.random() * 100),
-      status: Math.random() > 50 ? "success" : "error"
+      status: Math.random() > 0.5 ? "success" : "error"
     };
     socket.emit("dashboardData", data);
   }, 2000);
