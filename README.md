@@ -45,8 +45,8 @@ Este projeto é um **Dashboard em tempo real** desenvolvido com **Node.js (backe
 
 ### 5. Deploy
 - [X] Criar Dockerfile para backend e frontend.
-- [ ] Criar docker-compose.yml para subir ambiente.
-- [ ] Deploy em ambiente Docker.
+- [X] Criar docker-compose.yml para subir ambiente.
+- [X] Deploy em ambiente Docker.
 - [ ] Gerar versão 1.0.0.
 
 ---
