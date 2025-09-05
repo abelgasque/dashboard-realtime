@@ -32,8 +32,8 @@ Este projeto é um **Dashboard em tempo real** desenvolvido com **Node.js (backe
 - [X] Simular geração de dados ou integrar com fonte real.
 
 ### 3. Frontend (Angular)
-- [ ] Criar projeto Angular (`ng new dashboard-app`).
-- [ ] Instalar dependências: `socket.io-client`, `ng2-charts`, `chart.js`.
+- [X] Criar projeto Angular (`ng new dashboard-app`).
+- [X] Instalar dependências: `socket.io-client`, `ng2-charts`, `chart.js`.
 - [ ] Criar service para consumir WebSockets.
 - [ ] Criar componente `dashboard` para exibir métricas em tempo real.
 - [ ] Adicionar gráficos dinâmicos (line chart, bar chart, gauge).
