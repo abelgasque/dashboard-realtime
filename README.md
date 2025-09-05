@@ -21,9 +21,9 @@ Este projeto é um **Dashboard em tempo real** desenvolvido com **Node.js (backe
 ## 🛠️ Roadmap de Desenvolvimento
 
 ### 1. Planejamento
-- [ ] Definir escopo do dashboard (quais métricas serão exibidas).
-- [ ] Escolher banco de dados ou fonte de dados (MongoDB, MySQL, Redis ou simulação).
-- [ ] Decidir arquitetura: monolito simples ou microserviços.
+- [X] Definir escopo do dashboard (quais métricas serão exibidas).
+- [X] Escolher banco de dados ou fonte de dados (MongoDB, MySQL, Redis ou simulação).
+- [X] Decidir arquitetura: monolito simples ou microserviços.
 
 ### 2. Backend (Node.js)
 - [ ] Criar servidor com Express.
