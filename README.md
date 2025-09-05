@@ -44,16 +44,14 @@ Este projeto é um **Dashboard em tempo real** desenvolvido com **Node.js (backe
 - [X] Testar atualização em tempo real no browser.
 
 ### 5. Deploy
-- [ ] Criar Dockerfile para backend e frontend.
-- [ ] Configurar Nginx para servir Angular e proxy WebSocket.
-- [ ] Deploy em ambiente cloud (Heroku, Render, Azure ou AWS).
+- [X] Criar Dockerfile para backend e frontend.
+- [ ] Criar docker-compose.yml para subir ambiente.
+- [ ] Deploy em ambiente Docker.
+- [ ] Gerar versão 1.0.0.
 
 ---
 
-## 📦 Como rodar localmente
-
-### Backend
+## 📦 Implatar ambiente docker
 ```bash
-cd backend
-npm install
-node server.js
+docker-compose up -d
+```
