@@ -1,0 +1,13 @@
+<h2>📊 Dashboard em Tempo Real</h2>
+
+<div *ngIf="data">
+  <p><b>Hora:</b> {{ data.time }}</p>
+  <p><b>Valor:</b> {{ data.value }}</p>
+  <p><b>Status:</b> {{ data.status }}</p>
+</div>
+
+<canvas baseChart
+  [data]="chartData"
+  [labels]="chartData.labels"
+  [type]="'line'">
+</canvas>
