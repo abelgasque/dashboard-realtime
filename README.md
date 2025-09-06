@@ -1,7 +1,11 @@
 # 📊 Real-Time Dashboard (Node.js + Angular)
 
 Este projeto é um **Dashboard em tempo real** desenvolvido com **Node.js (backend)** e **Angular (frontend)**, utilizando **WebSockets (Socket.IO)** para comunicação em tempo real e **Chart.js** para visualização de dados.
+---
 
+## 📸 Demonstração
+
+![Demo do Dashboard](docs/demo.png)
 ---
 
 ## 🚀 Tecnologias
